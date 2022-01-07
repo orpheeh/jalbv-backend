@@ -5,13 +5,19 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/orpheeh/jalbv-backend/fake"
 )
 
 func InitHttp() {
 	r := gin.New()
+
 	r.Use(Logger())
 
+	fake.Routing(r)
+
 	r.Run(":8080")
+
 }
 
 func Logger() gin.HandlerFunc {
