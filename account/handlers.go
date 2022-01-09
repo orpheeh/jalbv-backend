@@ -44,11 +44,15 @@ func login(c *gin.Context) {
 	email := c.Param("email")
 	password := c.Param("password")
 	account, err := getAccountByEmail(email)
-	fmt.Println(err)
 	if err == nil {
 		isLogged := util.CompareHash(password, account.Password)
 		if isLogged {
-			c.IndentedJSON(http.StatusOK, gin.H{"token": "The token", "account": account})
+			token, err := util.SignToken(account)
+			if err != nil {
+				c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": fmt.Sprintln(err)})
+			} else {
+				c.IndentedJSON(http.StatusOK, gin.H{"token": token, "account": account})
+			}
 		} else {
 			c.IndentedJSON(http.StatusForbidden, gin.H{"message": "Password error"})
 		}
