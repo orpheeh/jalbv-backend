@@ -5,19 +5,16 @@ import (
 	"fmt"
 
 	"github.com/orpheeh/jalbv-backend/config/database"
+	util "github.com/orpheeh/jalbv-backend/utils"
 )
 
+var tableName string = "Account"
+
 func addAccount(account Account) (int64, error) {
-	result, err := database.Postgres.Exec(fmt.Sprintf(`INSERT INTO "Account" (email, password) VALUES ('%v', '%v')`, account.Email, account.Password))
-	if err != nil {
-		fmt.Println(err)
-		return 0, fmt.Errorf("addAccount: %v", err)
-	}
-	id, err := result.RowsAffected()
-	if err != nil {
-		return 0, fmt.Errorf("addAccount: %v", err)
-	}
-	return id, nil
+	datas := make(map[string]string)
+	datas["email"] = account.Email
+	datas["password"] = account.Password
+	return util.Create(tableName, datas)
 }
 
 func getAccountByID(id int) (Account, error) {
@@ -49,23 +46,34 @@ func getAccountByEmail(email string) (Account, error) {
 }
 
 func getAllCount() ([]Account, error) {
-	var accounts []Account
-	rows, err := database.Postgres.Query(`SELECT * FROM "Account"`)
-	if err != nil {
-		return nil, fmt.Errorf("accounts : %v", err)
+	var id, email, password string
+	var lastconnexion sql.NullString
+
+	variables := []interface{}{
+		&id, &email, &password, &lastconnexion,
 	}
-	defer rows.Close()
-	for rows.Next() {
+
+	keys := []string{"id", "email", "password", "lastconnexion"}
+
+	var accounts []Account
+	datas, err := util.ReadAll(tableName, variables, keys)
+
+	fmt.Println(err)
+
+	if err != nil {
+		return accounts, err
+	}
+
+	for _, data := range datas {
 		var account Account
-		if err := rows.Scan(&account.ID, &account.Email, &account.Password); err != nil {
-			return nil, fmt.Errorf("accounts: %v", err)
-		}
+		account.ID = data["id"]
+		account.Email = string(data["email"])
+		account.Password = string(data["password"])
+		account.LastConnexion = string(data["lastconnexion"])
 		accounts = append(accounts, account)
 	}
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("accounts: %v", err)
-	}
-	return accounts, nil
+
+	return accounts, err
 }
 
 func editAccount() {
