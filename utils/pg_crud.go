@@ -63,7 +63,9 @@ func ReadAll(tableName string, variables []interface{}, keys []string, condition
 
 func ReadOne(tableName string, variables []interface{}, keys []string, condition string) (map[string]string, error) {
 	var data map[string]string = make(map[string]string)
-	row := database.Postgres.QueryRow(fmt.Sprintf(`SELECT * FROM "%v" %v`, tableName, condition))
+	str := fmt.Sprintf(`SELECT * FROM "%v" %v`, tableName, condition)
+	fmt.Println(str)
+	row := database.Postgres.QueryRow(str)
 	if err := row.Scan(variables...); err != nil {
 		if err == sql.ErrNoRows {
 			return data, fmt.Errorf("No such found")

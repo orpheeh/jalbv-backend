@@ -14,7 +14,7 @@ func createAccount(c *gin.Context) {
 		return
 	}
 	newAccount.Password = util.Hash(newAccount.Password)
-	id, err1 := addAccount(newAccount)
+	id, err1 := AddAccount(newAccount)
 	if err1 != nil {
 		fmt.Println(err1)
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"location": err1})
@@ -32,7 +32,7 @@ func findAccountByID(c *gin.Context) {
 }
 
 func findAllAccount(c *gin.Context) {
-	accounts, err := getAllCount()
+	accounts, err := GetAllCount()
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": err})
 		return
@@ -43,7 +43,7 @@ func findAllAccount(c *gin.Context) {
 func login(c *gin.Context) {
 	email := c.Param("email")
 	password := c.Param("password")
-	account, err := getAccountByEmail(email)
+	account, err := GetAccountByEmail(email)
 	if err == nil {
 		isLogged := util.CompareHash(password, account.Password)
 		if isLogged {

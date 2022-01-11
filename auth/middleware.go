@@ -24,8 +24,6 @@ func Authorise() gin.HandlerFunc {
 
 		account, err := util.VerifyToken(bearerToken)
 
-		fmt.Println(account)
-
 		if err == nil {
 			c.Set("account", account)
 			c.Next()
