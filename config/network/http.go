@@ -9,14 +9,18 @@ import (
 	"github.com/orpheeh/jalbv-backend/account"
 	"github.com/orpheeh/jalbv-backend/admin"
 	"github.com/orpheeh/jalbv-backend/fake"
+	"github.com/orpheeh/jalbv-backend/social"
 )
 
 func InitHttp() {
 	r := gin.Default()
 
+	r.Static("/static", "./static")
+
 	fake.Routing(r)
 	account.Routing(r)
 	admin.Routing(r)
+	social.Routing(r)
 
 	r.Run(fmt.Sprintf(":%v", os.Getenv("PORT")))
 

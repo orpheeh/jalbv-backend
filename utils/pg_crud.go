@@ -90,7 +90,7 @@ func Update(tableName string, datas map[string]string, condition string) (int64,
 			updated = fmt.Sprintf(`%v,'%v = %v'`, updated, k, v)
 		}
 	}
-	str := fmt.Sprintf(`UPDATE "%v" SET %v WHERE %v`, tableName, updated, condition)
+	str := fmt.Sprintf(`UPDATE "%v" SET %v %v`, tableName, updated, condition)
 	result, err := database.Postgres.Exec(str)
 	if err != nil {
 		fmt.Println(err)
@@ -104,7 +104,7 @@ func Update(tableName string, datas map[string]string, condition string) (int64,
 }
 
 func Delete(tableName string, condition string) (int64, error) {
-	str := fmt.Sprintf(`DELETE FROM "%v" WHERE %v`, tableName, condition)
+	str := fmt.Sprintf(`DELETE FROM "%v" %v`, tableName, condition)
 	result, err := database.Postgres.Exec(str)
 	if err != nil {
 		fmt.Println(err)
