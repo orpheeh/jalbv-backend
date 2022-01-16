@@ -37,7 +37,7 @@ func UpdateSocial(social Social, id string) (int64, error) {
 		datas["imageURL"] = social.ImageURL
 	}
 	if social.IsActive != "" {
-		datas["isActive"] = social.IsActive
+		datas["isActive"] = fmt.Sprintf("%v", social.IsActive)
 	}
 	if social.Libelle != "" {
 		datas["libelle"] = social.Libelle

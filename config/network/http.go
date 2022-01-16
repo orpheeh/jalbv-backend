@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/orpheeh/jalbv-backend/account"
@@ -15,6 +16,12 @@ import (
 
 func InitHttp() {
 	r := gin.Default()
+
+	configCors := cors.DefaultConfig()
+	configCors.AllowAllOrigins = true
+	configCors.AllowHeaders = []string{"Content-Type", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With"}
+	configCors.AllowCredentials = true
+	r.Use(cors.New(configCors))
 
 	r.Static("/static", "./static")
 

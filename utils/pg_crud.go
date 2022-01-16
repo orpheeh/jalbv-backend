@@ -85,12 +85,13 @@ func Update(tableName string, datas map[string]string, condition string) (int64,
 	var updated string = ""
 	for k, v := range datas {
 		if updated == "" {
-			updated = fmt.Sprintf(`%v = '%v'`, k, v)
+			updated = fmt.Sprintf(`"%v" = '%v'`, k, v)
 		} else {
-			updated = fmt.Sprintf(`%v,'%v = %v'`, updated, k, v)
+			updated = fmt.Sprintf(`%v,"%v" = '%v'`, updated, k, v)
 		}
 	}
 	str := fmt.Sprintf(`UPDATE "%v" SET %v %v`, tableName, updated, condition)
+	fmt.Println(str)
 	result, err := database.Postgres.Exec(str)
 	if err != nil {
 		fmt.Println(err)

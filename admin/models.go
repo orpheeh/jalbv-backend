@@ -3,9 +3,9 @@ package admin
 import "github.com/orpheeh/jalbv-backend/account"
 
 type Admin struct {
-	ID        string
-	Nom       string
-	Prenom    string
+	ID        string `json:"id"`
+	Nom       string `json:"nom"`
+	Prenom    string `json:"prenom"`
 	Account   account.Account
-	AccountId string
+	AccountId string `json:"accountId"`
 }
