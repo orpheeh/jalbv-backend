@@ -13,8 +13,9 @@ func getAuthAdmin(c *gin.Context) {
 	if exist {
 		claims := value.(jwt.MapClaims)
 		fmt.Println(claims)
-		id := claims["ID"].(string)
+		id := claims["id"].(string)
 		response, err := getAdminByAccount(id)
+		fmt.Println(err)
 		if err != nil {
 			c.IndentedJSON(http.StatusUnauthorized, gin.H{"message": "User account not found"})
 		} else {
