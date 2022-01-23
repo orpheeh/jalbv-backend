@@ -6,7 +6,7 @@ type Produit struct {
 	Description string `json:"description"`
 	Avantages   string `json:"avantages"`
 	Limites     string `json:"limites"`
-	IsImport    string `json:"isImport"`
-	IsExport    string `json:"isExport"`
+	IsImport    bool   `json:"isImport"`
+	IsExport    bool   `json:"isExport"`
 	Forms       string `json:"forms"`
 }

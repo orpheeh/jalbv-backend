@@ -35,22 +35,28 @@ func Create(tableName string, datas map[string]string) (int64, error) {
 	return id, nil
 }
 
-func ReadAll(tableName string, variables []interface{}, keys []string, condition string) ([]map[string]string, error) {
-	var datas []map[string]string
+func ReadAll(tableName string, variables []interface{}, keys []string, condition string) ([]map[string]interface{}, error) {
+	var datas []map[string]interface{}
 	rows, err := database.Postgres.Query(fmt.Sprintf(`SELECT * FROM "%v" %v`, tableName, condition))
 	if err != nil {
 		return nil, fmt.Errorf("%v : %v", tableName, err)
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var data map[string]string = make(map[string]string)
+		var data map[string]interface{} = make(map[string]interface{})
 		if err := rows.Scan(variables...); err != nil {
 			return nil, fmt.Errorf("%v: %v", tableName, err)
 		}
 		for i, value := range variables {
 			rv := reflect.ValueOf(value)
-			if rv.Kind() == reflect.Ptr {
+			if rv.Elem().Kind() == reflect.Bool {
+				data[keys[i]] = rv.Elem().Bool()
+			}
+			if rv.Elem().Kind() == reflect.String {
 				data[keys[i]] = rv.Elem().String()
+			}
+			if rv.Elem().Kind() == reflect.Int {
+				data[keys[i]] = rv.Elem().Int()
 			}
 		}
 		datas = append(datas, data)

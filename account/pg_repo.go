@@ -68,10 +68,10 @@ func GetAllCount() ([]Account, error) {
 	}
 	for _, data := range datas {
 		var account Account
-		account.ID = data["id"]
-		account.Email = string(data["email"])
-		account.Password = string(data["password"])
-		account.LastConnexion = string(data["lastconnexion"])
+		account.ID = fmt.Sprint(data["id"])
+		account.Email = fmt.Sprint(data["email"])
+		account.Password = fmt.Sprint(data["password"])
+		account.LastConnexion = fmt.Sprint(data["lastconnexion"])
 		accounts = append(accounts, account)
 	}
 	return accounts, err

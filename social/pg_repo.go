@@ -21,11 +21,11 @@ func GetAllSocial() ([]Social, error) {
 	}
 	for _, data := range datas {
 		var social Social
-		social.ID = data["id"]
-		social.Libelle = string(data["libelle"])
-		social.ImageURL = string(data["imageURL"])
-		social.Link = string(data["link"])
-		social.IsActive = string(data["isActive"])
+		social.ID = fmt.Sprint(data["id"])
+		social.Libelle = fmt.Sprint(data["libelle"])
+		social.ImageURL = fmt.Sprint(data["imageURL"])
+		social.Link = fmt.Sprint(data["link"])
+		social.IsActive = fmt.Sprint(data["isActive"])
 		socials = append(socials, social)
 	}
 	return socials, err
