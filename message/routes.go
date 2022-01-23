@@ -9,4 +9,5 @@ func Routing(gr *gin.Engine) {
 	group := gr.Group("/message")
 
 	group.POST("/contact", sendContactMessage)
+	group.POST("/vendez-vos-kilos", sendVendezVosKilosMessage)
 }
