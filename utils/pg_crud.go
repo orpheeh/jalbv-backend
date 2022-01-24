@@ -22,14 +22,11 @@ func Create(tableName string, datas map[string]string) (int64, error) {
 			values = fmt.Sprintf(`%v,'%v'`, values, v)
 		}
 	}
-	str := fmt.Sprintf(`INSERT INTO "%v" (%v) VALUES (%v)`, tableName, keys, values)
-	result, err := database.Postgres.Exec(str)
+	str := fmt.Sprintf(`INSERT INTO "%v" (%v) VALUES (%v) RETURNING id`, tableName, keys, values)
+	var id int64
+	err := database.Postgres.QueryRow(str).Scan(&id)
 	if err != nil {
 		fmt.Println(err)
-		return 0, fmt.Errorf("add%v: %v", tableName, err)
-	}
-	id, err := result.RowsAffected()
-	if err != nil {
 		return 0, fmt.Errorf("add%v: %v", tableName, err)
 	}
 	return id, nil
