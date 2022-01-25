@@ -46,7 +46,6 @@ func getAuthClient(c *gin.Context) {
 		fmt.Println(claims)
 		id := claims["id"].(string)
 		response, err := getClientByAccount(id)
-		fmt.Println(err)
 		if err != nil {
 			c.IndentedJSON(http.StatusUnauthorized, gin.H{"message": "User account not found"})
 		} else {

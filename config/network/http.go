@@ -10,6 +10,7 @@ import (
 	"github.com/orpheeh/jalbv-backend/account"
 	"github.com/orpheeh/jalbv-backend/admin"
 	"github.com/orpheeh/jalbv-backend/client"
+	"github.com/orpheeh/jalbv-backend/commande"
 	"github.com/orpheeh/jalbv-backend/fake"
 	"github.com/orpheeh/jalbv-backend/message"
 	"github.com/orpheeh/jalbv-backend/produit"
@@ -34,6 +35,7 @@ func InitHttp() {
 	produit.Routing(r)
 	message.Routing(r)
 	client.Routing(r)
+	commande.Routing(r)
 
 	r.Run(fmt.Sprintf(":%v", os.Getenv("PORT")))
 
