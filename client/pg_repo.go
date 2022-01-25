@@ -11,10 +11,7 @@ import (
 var tableName string = "Client"
 
 func addClient(client Client) (int64, error) {
-	fmt.Println("AddClient")
 	datas := make(map[string]string)
-	fmt.Println(client.Account)
-	fmt.Println(client.AccountId)
 	datas["nom"] = client.Nom
 	datas["prenom"] = client.Prenom
 	datas["email"] = client.Email
