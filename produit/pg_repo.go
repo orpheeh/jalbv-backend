@@ -35,3 +35,26 @@ func GetAllProduit() ([]Produit, error) {
 	}
 	return produits, err
 }
+
+func GetProduitByID(idProduit string) (Produit, error) {
+	var id, libelle, description, avantages, limites, forms string
+	var isImport, isExport bool
+	variables := []interface{}{
+		&id, &libelle, &description, &avantages, &limites, &forms, &isImport, &isExport,
+	}
+	keys := []string{"id", "libelle", "description", "avantages", "limites", "forms", "isImport", "isExport"}
+	var produit Produit
+	data, err := util.ReadOne(tableName, variables, keys, fmt.Sprintf(` WHERE "id" = %v`, idProduit))
+	if err != nil {
+		return produit, err
+	}
+	produit.ID = fmt.Sprint(data["id"])
+	produit.Libelle = fmt.Sprint(data["libelle"])
+	produit.Description = fmt.Sprint(data["description"])
+	produit.Avantages = fmt.Sprint(data["avantages"])
+	produit.Limites = fmt.Sprint(data["limites"])
+	produit.Forms = fmt.Sprint(data["forms"])
+	produit.IsImport, _ = strconv.ParseBool(fmt.Sprint(data["isImport"]))
+	produit.IsExport, _ = strconv.ParseBool(fmt.Sprint(data["isExport"]))
+	return produit, err
+}

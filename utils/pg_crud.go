@@ -12,9 +12,9 @@ func Create(tableName string, datas map[string]string) (int64, error) {
 	var keys, values string = "", ""
 	for k, v := range datas {
 		if keys == "" {
-			keys = k
+			keys = fmt.Sprintf(`"%v"`, k)
 		} else {
-			keys = fmt.Sprintf("%v,%v", keys, k)
+			keys = fmt.Sprintf(`%v,"%v"`, keys, k)
 		}
 		if values == "" {
 			values = fmt.Sprintf(`'%v'`, v)
@@ -23,6 +23,7 @@ func Create(tableName string, datas map[string]string) (int64, error) {
 		}
 	}
 	str := fmt.Sprintf(`INSERT INTO "%v" (%v) VALUES (%v) RETURNING id`, tableName, keys, values)
+	fmt.Println(str)
 	var id int64
 	err := database.Postgres.QueryRow(str).Scan(&id)
 	if err != nil {
@@ -48,14 +49,14 @@ func ReadAll(tableName string, variables []interface{}, keys []string, condition
 			rv := reflect.ValueOf(value)
 			if rv.Elem().Kind() == reflect.Bool {
 				data[keys[i]] = rv.Elem().Bool()
-			}
-			if rv.Elem().Kind() == reflect.String {
+			} else if rv.Elem().Kind() == reflect.String {
 				data[keys[i]] = rv.Elem().String()
-			}
-			if rv.Elem().Kind() == reflect.Int {
+			} else if rv.Elem().Kind() == reflect.Int64 {
 				data[keys[i]] = rv.Elem().Int()
 			}
+
 		}
+		fmt.Println(datas)
 		datas = append(datas, data)
 	}
 	if err := rows.Err(); err != nil {

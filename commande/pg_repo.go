@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/orpheeh/jalbv-backend/produit"
 	util "github.com/orpheeh/jalbv-backend/utils"
 )
 
@@ -30,7 +31,7 @@ func getCommandeData(commande Commande) map[string]string {
 	datas["portChargement"] = fmt.Sprint(commande.PortChargement)
 	datas["paysChargement"] = fmt.Sprint(commande.PaysChargement)
 	datas["portDechargement"] = fmt.Sprint(commande.PortDechargement)
-	datas["payDechargement"] = fmt.Sprint(commande.PaysDechargement)
+	datas["paysDechargement"] = fmt.Sprint(commande.PaysDechargement)
 	datas["packingList"] = fmt.Sprint(commande.PackingList)
 
 	datas["societe"] = fmt.Sprint(commande.Societe)
@@ -60,7 +61,7 @@ func GetAllCommandeByClient(clientId1 string) ([]Commande, error) {
 	}
 	keys := []string{"id", "isImport", "isExport", "paysDepart", "paysArrive", "expediteurNom", "expediteurAdresse", "expediteurBP", "expediteurTelephone", "expediteurEmail", "destinataireNom", "destinataireAdresse", "destinataireEmail", "destinataireTelephone", "destinataireBP", "portChargement", "paysChargement", "portDechargement", "paysDechargement", "packingList", "societe", "NIF", "produitId", "etape", "clientId", "date"}
 	var commandes []Commande
-	datas, err := util.ReadAll("Commande", variables, keys, fmt.Sprintf(" WHERE clientId = %v", clientId1))
+	datas, err := util.ReadAll("Commande", variables, keys, fmt.Sprintf(` WHERE "clientId" = %v`, clientId1))
 	if err != nil {
 		return commandes, err
 	}
@@ -96,6 +97,8 @@ func GetAllCommandeByClient(clientId1 string) ([]Commande, error) {
 		commande.PaysArrive = fmt.Sprint(data["paysArrive"])
 		commande.ClientId, _ = strconv.Atoi(fmt.Sprint(data["clientId"]))
 		commande.Date = fmt.Sprint(data["date"])
+
+		commande.Produit, _ = produit.GetProduitByID(fmt.Sprint(commande.ProduitId))
 
 		commandes = append(commandes, commande)
 	}

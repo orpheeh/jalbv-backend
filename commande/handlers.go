@@ -1,6 +1,7 @@
 package commande
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,9 +12,11 @@ import (
 func createCommande(c *gin.Context) {
 	var newCommande Commande
 	if err := c.BindJSON(&newCommande); err != nil {
+		fmt.Println(err)
 		return
 	}
 	id, err1 := AddCommande(newCommande)
+	fmt.Println(err1)
 	if err1 != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"location": err1})
 	} else {
@@ -123,6 +126,7 @@ func editConteneurData(c *gin.Context) {
 func findAllCommandeByClient(c *gin.Context) {
 	socials, err := GetAllCommandeByClient(c.Param("id"))
 	if err != nil {
+		fmt.Println(err)
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": err})
 		return
 	}
