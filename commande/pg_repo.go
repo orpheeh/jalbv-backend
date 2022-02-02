@@ -82,7 +82,60 @@ func GetAllCommandeByClient(clientId1 string) ([]Commande, error) {
 		commande.DestinataireBP = fmt.Sprint(data["destinataireBP"])
 		commande.DestinataireEmail = fmt.Sprint(data["destinataireEmail"])
 		commande.DestinataireNom = fmt.Sprint(data["destinataireNom"])
-		commande.ExpediteurTelephone = fmt.Sprint(data["destinataireTelephone"])
+		commande.DestinataireTelephone = fmt.Sprint(data["destinataireTelephone"])
+
+		commande.PortChargement = fmt.Sprint(data["portChargement"])
+		commande.PaysChargement = fmt.Sprint(data["paysChargement"])
+		commande.PortDechargement = fmt.Sprint(data["portDechargement"])
+		commande.PaysDechargement = fmt.Sprint(data["paysDechargement"])
+		commande.PackingList = fmt.Sprint(data["packingList"])
+
+		commande.Societe = fmt.Sprint(data["societe"])
+		commande.NIF = fmt.Sprint(data["NIF"])
+		commande.Etape, _ = strconv.Atoi(fmt.Sprint(data["etape"]))
+		commande.PaysDepart = fmt.Sprint(data["paysDepart"])
+		commande.PaysArrive = fmt.Sprint(data["paysArrive"])
+		commande.ClientId, _ = strconv.Atoi(fmt.Sprint(data["clientId"]))
+		commande.Date = fmt.Sprint(data["date"])
+
+		commande.Produit, _ = produit.GetProduitByID(fmt.Sprint(commande.ProduitId))
+
+		commandes = append(commandes, commande)
+	}
+	return commandes, err
+}
+
+func GetAllCommande() ([]Commande, error) {
+	var id, etape, clientId, produitId int64
+	var isImport, isExport bool
+	var paysDepart, paysArrive, expediteurNom, expediteurAdresse, expediteurBP, expediteurTelephone, expediteurEmail, destinataireNom, destinataireAdresse, destinataireEmail, destinataireTelephone, destinataireBP, portChargement, paysChargement, portDechargement, paysDechargement, packingList, societe, NIF, date string
+	variables := []interface{}{
+		&id, &isImport, &isExport, &paysDepart, &paysArrive, &expediteurNom, &expediteurAdresse, &expediteurBP, &expediteurTelephone, &expediteurEmail, &destinataireNom, &destinataireAdresse, &destinataireEmail, &destinataireTelephone, &destinataireBP, &portChargement, &paysChargement, &portDechargement, &paysDechargement, &packingList, &societe, &NIF, &produitId, &etape, &clientId, &date,
+	}
+	keys := []string{"id", "isImport", "isExport", "paysDepart", "paysArrive", "expediteurNom", "expediteurAdresse", "expediteurBP", "expediteurTelephone", "expediteurEmail", "destinataireNom", "destinataireAdresse", "destinataireEmail", "destinataireTelephone", "destinataireBP", "portChargement", "paysChargement", "portDechargement", "paysDechargement", "packingList", "societe", "NIF", "produitId", "etape", "clientId", "date"}
+	var commandes []Commande
+	datas, err := util.ReadAll("Commande", variables, keys, "")
+	if err != nil {
+		return commandes, err
+	}
+	for _, data := range datas {
+		var commande Commande
+		commande.ID, _ = strconv.Atoi(fmt.Sprint((data["id"])))
+		commande.ProduitId, _ = strconv.Atoi(fmt.Sprint((data["produitId"])))
+		commande.IsImport, _ = strconv.ParseBool(fmt.Sprint(data["isImport"]))
+		commande.IsExport, _ = strconv.ParseBool(fmt.Sprint(data["isExport"]))
+
+		commande.ExpediteurAdresse = fmt.Sprint(data["expediteurAdresse"])
+		commande.ExpediteurBP = fmt.Sprint(data["expediteurBP"])
+		commande.ExpediteurEmail = fmt.Sprint(data["expediteurEmail"])
+		commande.ExpediteurNom = fmt.Sprint(data["expediteurNom"])
+		commande.ExpediteurTelephone = fmt.Sprint(data["expediteurTelephone"])
+
+		commande.DestinataireAdresse = fmt.Sprint(data["destinataireAdresse"])
+		commande.DestinataireBP = fmt.Sprint(data["destinataireBP"])
+		commande.DestinataireEmail = fmt.Sprint(data["destinataireEmail"])
+		commande.DestinataireNom = fmt.Sprint(data["destinataireNom"])
+		commande.DestinataireTelephone = fmt.Sprint(data["destinataireTelephone"])
 
 		commande.PortChargement = fmt.Sprint(data["portChargement"])
 		commande.PaysChargement = fmt.Sprint(data["paysChargement"])
@@ -133,7 +186,7 @@ func GetCommandeByID(paramId string) (Commande, error) {
 	commande.DestinataireBP = fmt.Sprint(data["destinataireBP"])
 	commande.DestinataireEmail = fmt.Sprint(data["destinataireEmail"])
 	commande.DestinataireNom = fmt.Sprint(data["destinataireNom"])
-	commande.ExpediteurTelephone = fmt.Sprint(data["destinataireTelephone"])
+	commande.DestinataireTelephone = fmt.Sprint(data["destinataireTelephone"])
 
 	commande.PortChargement = fmt.Sprint(data["portChargement"])
 	commande.PaysChargement = fmt.Sprint(data["paysChargement"])
@@ -148,6 +201,8 @@ func GetCommandeByID(paramId string) (Commande, error) {
 	commande.PaysArrive = fmt.Sprint(data["paysArrive"])
 	commande.ClientId, _ = strconv.Atoi(fmt.Sprint(data["clientId"]))
 	commande.Date = fmt.Sprint(data["date"])
+
+	commande.Produit, _ = produit.GetProduitByID(fmt.Sprint(commande.ProduitId))
 
 	return commande, err
 }

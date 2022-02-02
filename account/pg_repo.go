@@ -28,10 +28,10 @@ func GetAccountByID(idParam int) (Account, error) {
 	if err != nil {
 		return account, err
 	}
-	account.ID = data["id"]
-	account.Email = string(data["email"])
-	account.Password = string(data["password"])
-	account.LastConnexion = string(data["lastconnexion"])
+	account.ID = fmt.Sprint(data["id"])
+	account.Email = fmt.Sprint(data["email"])
+	account.Password = fmt.Sprint(data["password"])
+	account.LastConnexion = fmt.Sprint(data["lastconnexion"])
 	return account, err
 }
 
@@ -47,10 +47,10 @@ func GetAccountByEmail(emailParam string) (Account, error) {
 	if err != nil {
 		return account, err
 	}
-	account.ID = data["id"]
-	account.Email = string(data["email"])
-	account.Password = string(data["password"])
-	account.LastConnexion = string(data["lastconnexion"])
+	account.ID = fmt.Sprint(data["id"])
+	account.Email = fmt.Sprint(data["email"])
+	account.Password = fmt.Sprint(data["password"])
+	account.LastConnexion = fmt.Sprint(data["lastconnexion"])
 	return account, err
 }
 

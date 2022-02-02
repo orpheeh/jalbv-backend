@@ -29,10 +29,10 @@ func getAdminByAccount(accountParam string) (Admin, error) {
 	if err != nil {
 		return admin, err
 	}
-	admin.ID = data["id"]
-	admin.Nom = string(data["nom"])
-	admin.Prenom = string(data["prenom"])
-	admin.AccountId = string(data["account"])
+	admin.ID = fmt.Sprint(data["id"])
+	admin.Nom = fmt.Sprint(data["nom"])
+	admin.Prenom = fmt.Sprint(data["prenom"])
+	admin.AccountId = fmt.Sprint(data["account"])
 	v, _ := strconv.Atoi(admin.AccountId)
 	admin.Account, _ = account.GetAccountByID(v)
 	return admin, err

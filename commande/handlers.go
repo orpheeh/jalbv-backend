@@ -133,6 +133,16 @@ func findAllCommandeByClient(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, socials)
 }
 
+func findAllCommande(c *gin.Context) {
+	socials, err := GetAllCommande()
+	if err != nil {
+		fmt.Println(err)
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": err})
+		return
+	}
+	c.IndentedJSON(http.StatusOK, socials)
+}
+
 func findAllColisByCommande(c *gin.Context) {
 	socials, err := GetAllByCommande(c.Param("id"))
 	if err != nil {

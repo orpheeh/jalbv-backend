@@ -54,9 +54,7 @@ func ReadAll(tableName string, variables []interface{}, keys []string, condition
 			} else if rv.Elem().Kind() == reflect.Int64 {
 				data[keys[i]] = rv.Elem().Int()
 			}
-
 		}
-		fmt.Println(datas)
 		datas = append(datas, data)
 	}
 	if err := rows.Err(); err != nil {
@@ -65,10 +63,9 @@ func ReadAll(tableName string, variables []interface{}, keys []string, condition
 	return datas, nil
 }
 
-func ReadOne(tableName string, variables []interface{}, keys []string, condition string) (map[string]string, error) {
-	var data map[string]string = make(map[string]string)
+func ReadOne(tableName string, variables []interface{}, keys []string, condition string) (map[string]interface{}, error) {
+	var data map[string]interface{} = make(map[string]interface{})
 	str := fmt.Sprintf(`SELECT * FROM "%v" %v`, tableName, condition)
-	fmt.Println(str)
 	row := database.Postgres.QueryRow(str)
 	if err := row.Scan(variables...); err != nil {
 		if err == sql.ErrNoRows {
@@ -78,8 +75,12 @@ func ReadOne(tableName string, variables []interface{}, keys []string, condition
 	}
 	for i, value := range variables {
 		rv := reflect.ValueOf(value)
-		if rv.Kind() == reflect.Ptr {
+		if rv.Elem().Kind() == reflect.Bool {
+			data[keys[i]] = rv.Elem().Bool()
+		} else if rv.Elem().Kind() == reflect.String {
 			data[keys[i]] = rv.Elem().String()
+		} else if rv.Elem().Kind() == reflect.Int64 {
+			data[keys[i]] = rv.Elem().Int()
 		}
 	}
 	return data, nil
@@ -95,7 +96,6 @@ func Update(tableName string, datas map[string]string, condition string) (int64,
 		}
 	}
 	str := fmt.Sprintf(`UPDATE "%v" SET %v %v`, tableName, updated, condition)
-	fmt.Println(str)
 	result, err := database.Postgres.Exec(str)
 	if err != nil {
 		fmt.Println(err)

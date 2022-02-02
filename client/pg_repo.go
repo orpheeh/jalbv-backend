@@ -34,16 +34,16 @@ func getClientByAccount(accountParam string) (Client, error) {
 	if err != nil {
 		return client, err
 	}
-	client.ID = data["id"]
-	client.Nom = string(data["nom"])
-	client.Prenom = string(data["prenom"])
-	client.Email = string(data["email"])
-	client.Telephone = string(data["telephone"])
-	client.Adresse = string(data["adresse"])
-	client.Profession = string(data["profession"])
-	client.Entreprise = string(data["entreprise"])
+	client.ID = fmt.Sprint(data["id"])
+	client.Nom = fmt.Sprint(data["nom"])
+	client.Prenom = fmt.Sprint(data["prenom"])
+	client.Email = fmt.Sprint(data["email"])
+	client.Telephone = fmt.Sprint(data["telephone"])
+	client.Adresse = fmt.Sprint(data["adresse"])
+	client.Profession = fmt.Sprint(data["profession"])
+	client.Entreprise = fmt.Sprint(data["entreprise"])
 
-	client.AccountId = string(data["account"])
+	client.AccountId = fmt.Sprint(data["account"])
 	v, _ := strconv.Atoi(client.AccountId)
 	client.Account, _ = account.GetAccountByID(v)
 	return client, err
