@@ -31,6 +31,7 @@ func createColis(c *gin.Context) {
 	}
 	id, err1 := AddColis(newCommande)
 	if err1 != nil {
+		fmt.Println(err1)
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"location": err1})
 	} else {
 		c.IndentedJSON(http.StatusOK, gin.H{"location": id})
@@ -144,8 +145,10 @@ func findAllCommande(c *gin.Context) {
 }
 
 func findAllColisByCommande(c *gin.Context) {
-	socials, err := GetAllByCommande(c.Param("id"))
+	id := c.Param("id")
+	socials, err := GetAllByCommande(id)
 	if err != nil {
+		fmt.Println(err)
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": err})
 		return
 	}

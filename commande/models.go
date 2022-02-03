@@ -49,7 +49,6 @@ type Colis struct {
 
 type Courrier struct {
 	ID         int    `json:"id"`
-	Quantite   int    `json:"quantite"`
 	Largeur    int    `json:"largeur"`
 	Longueur   int    `json:"longueur"`
 	Hauteur    int    `json:"hauteur"`

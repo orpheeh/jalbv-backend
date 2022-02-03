@@ -35,7 +35,15 @@ func Create(tableName string, datas map[string]string) (int64, error) {
 
 func ReadAll(tableName string, variables []interface{}, keys []string, condition string) ([]map[string]interface{}, error) {
 	var datas []map[string]interface{}
-	rows, err := database.Postgres.Query(fmt.Sprintf(`SELECT * FROM "%v" %v`, tableName, condition))
+	params := ""
+	for i, k := range keys {
+		if i == 0 {
+			params = fmt.Sprintf(`"%v"`, k)
+		} else {
+			params = fmt.Sprintf(`%v,"%v"`, params, k)
+		}
+	}
+	rows, err := database.Postgres.Query(fmt.Sprintf(`SELECT %v FROM "%v" %v`, params, tableName, condition))
 	if err != nil {
 		return nil, fmt.Errorf("%v : %v", tableName, err)
 	}
@@ -52,6 +60,8 @@ func ReadAll(tableName string, variables []interface{}, keys []string, condition
 			} else if rv.Elem().Kind() == reflect.String {
 				data[keys[i]] = rv.Elem().String()
 			} else if rv.Elem().Kind() == reflect.Int64 {
+				data[keys[i]] = rv.Elem().Int()
+			} else if rv.Elem().Kind() == reflect.Int {
 				data[keys[i]] = rv.Elem().Int()
 			}
 		}

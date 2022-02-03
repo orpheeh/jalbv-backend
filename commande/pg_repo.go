@@ -235,13 +235,13 @@ func GetAllByCommande(commandeId1 string) ([]Colis, error) {
 	var photoURL string
 
 	variables := []interface{}{
-		&id, &quantite, &largeur, &longueur, &hauteur, &poids, &commandeId, &photoURL,
+		&id, &quantite, &largeur, &longueur, &hauteur, &photoURL, &poids, &commandeId,
 	}
 	keys := []string{
-		"id", "quantite", "largeur", "longueur", "hauteur", "poids", "commandeId", "photoURL",
+		"id", "quantite", "largeur", "longueur", "hauteur", "photoURL", "poids", "commandeId",
 	}
 	var colis []Colis
-	datas, err := util.ReadAll("Colis", variables, keys, fmt.Sprintf(" WHERE commandeId = %v", commandeId))
+	datas, err := util.ReadAll("Colis", variables, keys, fmt.Sprintf(` WHERE "commandeId" = %v`, commandeId1))
 	if err != nil {
 		return colis, err
 	}
@@ -286,20 +286,20 @@ func UpdateCourrier(courrier Courrier, id string) (int64, error) {
 }
 
 func GetAllCourrierByCommande(commandeId1 string) ([]Courrier, error) {
-	var id, quantite, commandeId int
+	var id, commandeId int
 	var largeur, longueur, hauteur, poids int
 	var photoURL, type1, nom string
 
 	variables := []interface{}{
-		&id, &quantite, &largeur, &longueur, &hauteur, &poids, &commandeId, &photoURL, &type1, &nom,
+		&id, &largeur, &longueur, &hauteur, &poids, &commandeId, &photoURL, &type1, &nom,
 	}
 
 	keys := []string{
-		"id", "quantite", "largeur", "longueur", "hauteur", "poids", "commandeId", "photoURL", "type", "nom",
+		"id", "largeur", "longueur", "hauteur", "poids", "commandeId", "photoURL", "type", "nom",
 	}
 
 	var courrier []Courrier
-	datas, err := util.ReadAll("Courrier", variables, keys, fmt.Sprintf(" WHERE commandeId = %v", commandeId))
+	datas, err := util.ReadAll("Courrier", variables, keys, fmt.Sprintf(` WHERE "commandeId" = %v`, commandeId1))
 	if err != nil {
 		return courrier, err
 	}
@@ -310,7 +310,6 @@ func GetAllCourrierByCommande(commandeId1 string) ([]Courrier, error) {
 		commande.Longueur, _ = strconv.Atoi(fmt.Sprint(data["longueur"]))
 		commande.Hauteur, _ = strconv.Atoi(fmt.Sprint(data["hauteur"]))
 		commande.Poids, _ = strconv.Atoi(fmt.Sprint(data["poids"]))
-		commande.Quantite, _ = strconv.Atoi(fmt.Sprint(data["quantite"]))
 		commande.PhotoURL = fmt.Sprint(data["photoURL"])
 		commande.Nom = fmt.Sprint(data["nom"])
 		commande.Type = fmt.Sprint(data["type"])
@@ -352,7 +351,7 @@ func GetAllConteneurByCommande(commandeId1 string) ([]Conteneur, error) {
 	}
 
 	var courrier []Conteneur
-	datas, err := util.ReadAll("Conteneur", variables, keys, fmt.Sprintf(" WHERE commandeId = %v", commandeId))
+	datas, err := util.ReadAll("Conteneur", variables, keys, fmt.Sprintf(` WHERE "commandeId" = %v`, commandeId1))
 	if err != nil {
 		return courrier, err
 	}
