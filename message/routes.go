@@ -10,4 +10,5 @@ func Routing(gr *gin.Engine) {
 
 	group.POST("/contact", sendContactMessage)
 	group.POST("/vendez-vos-kilos", sendVendezVosKilosMessage)
+	group.POST("/validation-commande/:id", sendCommandeValidationEmail)
 }

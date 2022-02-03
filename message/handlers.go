@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/orpheeh/jalbv-backend/commande"
 	util "github.com/orpheeh/jalbv-backend/utils"
 )
 
@@ -37,6 +38,20 @@ func sendContactMessage(c *gin.Context) {
 
 	email := os.Getenv("CONTACT")
 	util.SendEmail(email, "Message d'internaute JALBV", contactMessageContent(newFake))
+
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Message envoyé !"})
+}
+
+func sendCommandeValidationEmail(c *gin.Context) {
+	socials, err := commande.GetCommandeByID(c.Param("id"))
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": err})
+		return
+	}
+	c.IndentedJSON(http.StatusOK, socials)
+
+	email := os.Getenv("CONTACT")
+	util.SendEmail(email, fmt.Sprintf(`Validation de la commande N°%v du %v`, socials.ID, socials.Date), validationCommandeEmail(socials))
 
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Message envoyé !"})
 }
@@ -94,4 +109,14 @@ func vendezVosKilosMessageContent(data VendezVosKilos) string {
 	<br />
 	
 	`, data.Fullname, data.Email, data.Telephone, data.Kilos, data.DateDepart, data.AeroportDepart, data.AeroportArrive, data.PaysDepart, data.PaysArrive)
+}
+
+func validationCommandeEmail(data commande.Commande) string {
+	return fmt.Sprintf(`
+	<p>Bonjour,</p>
+	<p>Une nouvelle commande vient d'être validé sur le site  jarrivealibreville.com, Veuillez vous connecter à l'interface d'administration pour commencer le traitement !/p>
+
+	<br />
+	
+	`)
 }
