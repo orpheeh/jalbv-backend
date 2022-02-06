@@ -64,6 +64,38 @@ func createConteneur(c *gin.Context) {
 	}
 }
 
+/** DELETE */
+
+func deleteColis(c *gin.Context) {
+	idParam, _ := c.Params.Get("id")
+	_, err1 := DeleteColis(idParam)
+	if err1 != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": fmt.Sprint(err1)})
+	} else {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "deleted successfully !"})
+	}
+}
+
+func deleteCourrier(c *gin.Context) {
+	idParam, _ := c.Params.Get("id")
+	_, err1 := DeleteCourrier(idParam)
+	if err1 != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": fmt.Sprint(err1)})
+	} else {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "deleted successfully !"})
+	}
+}
+
+func deleteConteneur(c *gin.Context) {
+	idParam, _ := c.Params.Get("id")
+	_, err1 := DeleteConteneur(idParam)
+	if err1 != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": fmt.Sprint(err1)})
+	} else {
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "deleted successfully !"})
+	}
+}
+
 /** UPDATE */
 
 func editCommandeData(c *gin.Context) {

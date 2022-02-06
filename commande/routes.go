@@ -25,4 +25,8 @@ func Routing(gr *gin.Engine) {
 	group.PUT("/courrier/:id", auth.Authorise(), editCourrierData)
 	group.PUT("/conteneur/:id", auth.Authorise(), editConteneurData)
 
+	group.DELETE("/colis/:id", auth.Authorise(), deleteColis)
+	group.DELETE("/courrier/:id", auth.Authorise(), deleteCourrier)
+	group.DELETE("/conteneur/:id", auth.Authorise(), deleteConteneur)
+
 }

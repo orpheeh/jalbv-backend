@@ -232,6 +232,10 @@ func UpdateColis(colis Colis, id string) (int64, error) {
 	return util.Update("Colis", getColisData(colis), fmt.Sprintf(" WHERE id = %v", id))
 }
 
+func DeleteColis(id string) (int64, error) {
+	return util.Delete("Colis", fmt.Sprintf(" WHERE id = %v", id))
+}
+
 func GetAllByCommande(commandeId1 string) ([]Colis, error) {
 	var id, quantite, commandeId int
 	var largeur, longueur, hauteur, poids int
@@ -288,6 +292,10 @@ func UpdateCourrier(courrier Courrier, id string) (int64, error) {
 	return util.Update("Courrier", getCourrierData(courrier), fmt.Sprintf(" WHERE id = %v", id))
 }
 
+func DeleteCourrier(id string) (int64, error) {
+	return util.Delete("Courrier", fmt.Sprintf(" WHERE id = %v", id))
+}
+
 func GetAllCourrierByCommande(commandeId1 string) ([]Courrier, error) {
 	var id, commandeId int
 	var largeur, longueur, hauteur, poids int
@@ -339,6 +347,10 @@ func AddConteneur(conteneur Conteneur) (int64, error) {
 
 func UpdateConteneur(conteneur Conteneur, id string) (int64, error) {
 	return util.Update("Conteneur", getConteneurData(conteneur), fmt.Sprintf(" WHERE id = %v", id))
+}
+
+func DeleteConteneur(id string) (int64, error) {
+	return util.Delete("Conteneur", fmt.Sprintf(" WHERE id = %v", id))
 }
 
 func GetAllConteneurByCommande(commandeId1 string) ([]Conteneur, error) {
