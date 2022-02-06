@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/orpheeh/jalbv-backend/client"
 	"github.com/orpheeh/jalbv-backend/produit"
 	util "github.com/orpheeh/jalbv-backend/utils"
 )
@@ -99,6 +100,7 @@ func GetAllCommandeByClient(clientId1 string) ([]Commande, error) {
 		commande.Date = fmt.Sprint(data["date"])
 
 		commande.Produit, _ = produit.GetProduitByID(fmt.Sprint(commande.ProduitId))
+		commande.Client, _ = client.GetClientByID(fmt.Sprint(commande.ClientId))
 
 		commandes = append(commandes, commande)
 	}
@@ -203,6 +205,7 @@ func GetCommandeByID(paramId string) (Commande, error) {
 	commande.Date = fmt.Sprint(data["date"])
 
 	commande.Produit, _ = produit.GetProduitByID(fmt.Sprint(commande.ProduitId))
+	commande.Client, _ = client.GetClientByID(fmt.Sprint(commande.ClientId))
 
 	return commande, err
 }
