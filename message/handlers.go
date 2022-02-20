@@ -51,7 +51,7 @@ func sendCommandeValidationEmail(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, socials)
 
 	email := os.Getenv("CONTACT")
-	util.SendEmail(email, fmt.Sprintf(`Validation de la commande N°%v du %v`, socials.ID, socials.Date), validationCommandeEmail(socials))
+	util.SendEmail(email, fmt.Sprintf(`Validation de la commande N°%v du %v`, commande.GetCommandeID(socials), socials.Date), validationCommandeEmail(socials))
 
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Message envoyé !"})
 }
@@ -112,11 +112,20 @@ func vendezVosKilosMessageContent(data VendezVosKilos) string {
 }
 
 func validationCommandeEmail(data commande.Commande) string {
+
 	return fmt.Sprintf(`
 	<p>Bonjour,</p>
-	<p>Une nouvelle commande vient d'être validé sur le site  jarrivealibreville.com, Veuillez vous connecter à l'interface d'administration pour commencer le traitement !/p>
-
+	<p>Une nouvelle commande vient d'être validé sur le site  jarrivealibreville.com, Veuillez vous connecter à l'interface d'administration pour commencer le traitement </p>
 	<br />
-	
-	`)
+	<p>IDENTIFICATION DU CLIENT</p>
+	<p><strong>FullName: </strong> %v %v </p>
+	<p><strong>Account ID: </strong> %v </p>
+	<br/>
+	<p>IDENTIFICATION DE LA COMMANDE</p>
+	<p><strong>Number: </strong> %v </p>
+	<p><strong>Type: </strong> %v </p>
+	<br/>
+	<p>Ceci est un message automatique, Ne pas y répondre,</p>
+	<p>Cordialement,</p>
+	`, data.Client.Nom, data.Client.Prenom, data.Client.Account.Email, commande.GetCommandeID(data), data.Produit.Libelle)
 }

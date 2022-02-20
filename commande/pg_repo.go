@@ -3,6 +3,7 @@ package commande
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/orpheeh/jalbv-backend/client"
 	"github.com/orpheeh/jalbv-backend/produit"
@@ -10,6 +11,11 @@ import (
 )
 
 /** Commande */
+
+func GetCommandeID(data Commande) string {
+	date := strings.Split(data.Date, "-")
+	return fmt.Sprintf(`%v%v%03d`, date[0], data.Produit.ID, data.ID)
+}
 
 func getCommandeData(commande Commande) map[string]string {
 	datas := make(map[string]string)
@@ -242,10 +248,10 @@ func GetAllByCommande(commandeId1 string) ([]Colis, error) {
 	var photoURL string
 
 	variables := []interface{}{
-		&id, &quantite, &largeur, &longueur, &hauteur, &photoURL, &poids, &commandeId,
+		&id, &quantite, &largeur, &longueur, &hauteur, &poids, &photoURL, &commandeId,
 	}
 	keys := []string{
-		"id", "quantite", "largeur", "longueur", "hauteur", "photoURL", "poids", "commandeId",
+		"id", "quantite", "largeur", "longueur", "hauteur", "poids", "photoURL", "commandeId",
 	}
 	var colis []Colis
 	datas, err := util.ReadAll("Colis", variables, keys, fmt.Sprintf(` WHERE "commandeId" = %v`, commandeId1))
@@ -266,6 +272,33 @@ func GetAllByCommande(commandeId1 string) ([]Colis, error) {
 		colis = append(colis, commande)
 	}
 	return colis, err
+}
+
+func GetColisByID(idColis string) (Colis, error) {
+	var id, quantite, commandeId int
+	var largeur, longueur, hauteur, poids int
+	var photoURL string
+
+	variables := []interface{}{
+		&id, &quantite, &largeur, &longueur, &hauteur, &poids, &photoURL, &commandeId,
+	}
+	keys := []string{
+		"id", "quantite", "largeur", "longueur", "hauteur", "poids", "photoURL", "commandeId",
+	}
+	var commande Colis
+	data, err := util.ReadOne("Colis", variables, keys, fmt.Sprintf(` WHERE "id" = %v`, idColis))
+	if err != nil {
+		return commande, err
+	}
+	commande.ID, _ = strconv.Atoi(fmt.Sprint((data["id"])))
+	commande.Largeur, _ = strconv.Atoi(fmt.Sprint((data["largeur"])))
+	commande.Longueur, _ = strconv.Atoi(fmt.Sprint(data["longueur"]))
+	commande.Hauteur, _ = strconv.Atoi(fmt.Sprint(data["hauteur"]))
+	commande.Poids, _ = strconv.Atoi(fmt.Sprint(data["poids"]))
+	commande.Quantite, _ = strconv.Atoi(fmt.Sprint(data["quantite"]))
+	commande.PhotoURL = fmt.Sprint(data["photoURL"])
+	commande.CommandeId, _ = strconv.Atoi(fmt.Sprint((data["commandeId"])))
+	return commande, err
 }
 
 /** Courrier */

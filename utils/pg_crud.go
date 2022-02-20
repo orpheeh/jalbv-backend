@@ -75,7 +75,15 @@ func ReadAll(tableName string, variables []interface{}, keys []string, condition
 
 func ReadOne(tableName string, variables []interface{}, keys []string, condition string) (map[string]interface{}, error) {
 	var data map[string]interface{} = make(map[string]interface{})
-	str := fmt.Sprintf(`SELECT * FROM "%v" %v`, tableName, condition)
+	params := ""
+	for i, k := range keys {
+		if i == 0 {
+			params = fmt.Sprintf(`"%v"`, k)
+		} else {
+			params = fmt.Sprintf(`%v,"%v"`, params, k)
+		}
+	}
+	str := fmt.Sprintf(`SELECT %v FROM "%v" %v`, params, tableName, condition)
 	row := database.Postgres.QueryRow(str)
 	if err := row.Scan(variables...); err != nil {
 		if err == sql.ErrNoRows {
@@ -90,6 +98,8 @@ func ReadOne(tableName string, variables []interface{}, keys []string, condition
 		} else if rv.Elem().Kind() == reflect.String {
 			data[keys[i]] = rv.Elem().String()
 		} else if rv.Elem().Kind() == reflect.Int64 {
+			data[keys[i]] = rv.Elem().Int()
+		} else if rv.Elem().Kind() == reflect.Int {
 			data[keys[i]] = rv.Elem().Int()
 		}
 	}

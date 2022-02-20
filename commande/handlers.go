@@ -2,10 +2,46 @@ package commande
 
 import (
 	"fmt"
+	"io"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
+
+/** UPLOAD */
+
+func uploadPhotoColis(c *gin.Context) {
+	file, header, err := c.Request.FormFile("file")
+	if err != nil {
+		c.String(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
+		return
+	}
+	filename := header.Filename
+	out, err := os.Create("static/upload/" + filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	_, err = io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	filepath := os.Getenv("API_URL") + "/static/upload/" + filename
+
+	colis, err := GetColisByID(c.Param("id"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	colis.PhotoURL = filepath
+	fmt.Println(colis.PhotoURL)
+	_, err = UpdateColis(colis, c.Param("id"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	c.JSON(http.StatusOK, gin.H{"filepath": filepath})
+}
 
 /** CREATE */
 

@@ -17,6 +17,7 @@ func Routing(gr *gin.Engine) {
 
 	group.POST("", auth.Authorise(), createCommande)
 	group.POST("/colis", auth.Authorise(), createColis)
+	group.POST("/colis/photo/:id", auth.Authorise(), uploadPhotoColis)
 	group.POST("/courrier", auth.Authorise(), createCourrier)
 	group.POST("/conteneur", auth.Authorise(), createConteneur)
 
