@@ -17,8 +17,11 @@ type adminData struct {
 }
 
 var admins = []adminData{
-	{Nom: "Nve", Prenom: "Orphée", Email: "norpheehounkponou@gmail.com"},
-	{Nom: "Mve", Prenom: "Orphé", Email: "orpheenve@hotmail.com"},
+	{Nom: "Air", Prenom: "Fret", Email: "air.fret@jarrivealibreville.com"},
+	{Nom: "Malolas", Prenom: "Ditch", Email: "d.malolas@jarrivealibreville.com"},
+	{Nom: "Sea", Prenom: "Ship", Email: "sea.ship@jarrivealibreville.com"},
+	{Nom: "Achat", Prenom: "Achat", Email: "purchase@jarrivealibreville.com"},
+	{Nom: "Manager", Prenom: "Manager", Email: "manager@jarrivealibreville.com"},
 }
 
 func Init() {
